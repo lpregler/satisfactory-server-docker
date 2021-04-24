@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  satisfactory-server:
+    image: satisfactory-server:1.0.0
+    ports:
+      - "7777:7777/udp"
+    volumes:
+      - type: bind
+        source: "/home/steam/SaveGames"
+        target: "/home/steam/compatdata/pfx/drive_c/users/steamuser/Local Settings/Application Data/FactoryGame/Saved/SaveGames"
+   restart: always

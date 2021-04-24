@@ -1,0 +1,10 @@
+FROM steamcmd/steamcmd:latest
+
+ARG user=<PUT_STEAM_USERNAME_HERE>
+ARG password=<PUT_STEAM_PASSWORD_HERE>
+
+# login and trigger Steam Guard on build
+RUN steamcmd +login ${user} ${password} +quit
+
+# trigger Steam Guard when running the container
+CMD [ "steamcmd", "+login", "${user}", "${password}", "+quit" ]
