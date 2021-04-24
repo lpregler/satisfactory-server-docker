@@ -228,7 +228,7 @@ an idea where to find your saves.
 ### Limitations
 As far as I know there are some limitations when it comes to playing as a client
 instead of hosting a Satisfactory session. According to the
-[follwoing reddit comment](https://www.reddit.com/r/satisfactory/comments/e3hmm9/shadow_as_a_dedicated_server_for_satisfactory/f9pg9kh?utm_source=share&utm_medium=web2x&context=3)
+[following reddit comment](https://www.reddit.com/r/satisfactory/comments/e3hmm9/shadow_as_a_dedicated_server_for_satisfactory/f9pg9kh?utm_source=share&utm_medium=web2x&context=3)
 it seems you are only able to create vehicle auto-pilot paths as well as train
 tracks when actively hosting a session. Unfortunately I cannot verify this myself
 because I currently do not have a save with either vehicles or trains.

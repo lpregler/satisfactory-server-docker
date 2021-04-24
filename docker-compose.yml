@@ -8,4 +8,4 @@ services:
       - type: bind
         source: "/home/steam/SaveGames"
         target: "/home/steam/compatdata/pfx/drive_c/users/steamuser/Local Settings/Application Data/FactoryGame/Saved/SaveGames"
-   restart: always
+    restart: always
