@@ -4,6 +4,9 @@ ARG guard_code=<PUT_STEAM_GUARD_CODE_HERE>
 ARG user=<PUT_STEAM_USERNAME_HERE>
 ARG password=<PUT_STEAM_PASSWORD_HERE>
 
+# add python script for ini configuration from context to image
+ADD configure-ini-files.py /home/steam/configure-ini-files.py
+
 # install Proton requirements
 RUN dpkg --add-architecture i386
 RUN apt-get update
@@ -28,13 +31,16 @@ WORKDIR '/home/steam/Steam/steamapps/common/Proton 5.0'
 # Start the game in order to create the ini files
 RUN (timeout 20 ./proton run ../Satisfactory/FactoryGame.exe -nosplash -nullrhi -nosound -NoSteamClient; exit 0)
 
+# use the provided python script to configure the relevant ini files in order to force the given map to load
+# and adjust multiplayer network settings as suggested by https://satisfactory.fandom.com/wiki/Multiplayer
+RUN python3 /home/steam/configure-ini-files.py
+# make adjusted ini files readonly to prevent the game to overwrite the configuration
+RUN chmod 444 /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/Config/WindowsNoEditor/Engine.ini
+RUN chmod 444 /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/Config/WindowsNoEditor/Game.ini
+RUN chmod 444 /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/Config/WindowsNoEditor/Scalability.ini
+
 # Create Save Game directory which is used for mounting "local" save game data
 RUN mkdir /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/SaveGames
-
-# Force a given map to load on startup by adjusting the given configuration
-RUN echo "[/Script/EngineSettings.GameMapsSettings]" >> /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/Config/WindowsNoEditor/Engine.ini
-RUN echo "GameDefaultMap=/Game/FactoryGame/Map/GameLevel01/Persistent_Level" >> /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/Config/WindowsNoEditor/Engine.ini
-RUN echo "LocalMapOptions=??sessionName=ServerSave?Visibility=SV_FriendsOnly?loadgame=ServerSave_autosave_1?listen?bUseIpSockets?name=Host" >> /home/steam/compatdata/pfx/drive_c/users/steamuser/Local\ Settings/Application\ Data/FactoryGame/Saved/Config/WindowsNoEditor/Engine.ini
 
 # Run Satisfactory Experimental via Proton (on Container Startup)
 ENTRYPOINT [ "./proton", "run", "../Satisfactory/FactoryGame.exe", "-nosplash", "-nullrhi", "-nosound", "-NoSteamClient" ]
