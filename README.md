@@ -137,21 +137,31 @@ With the image ready to use, you can easily start the server using the provided
 `docker-compose.yml` file (note you need to
 [install `dockercompose`](https://docs.docker.com/compose/install/)
  for this to work). There is one more thing left for you to do before that, though.
-You have to prepare some save-game files (e.g. a game you started and saved locally).
+You have to prepare some save-game file.
+
+### Prepare save-game file
+The easiest way to get started is by adjusting an already existing local save file
+to meet the requirements defined in the `Dockerfile`. Simply start Satisfactory on
+your local machine and load the save-game you want to host on your server.
+Once loaded into the game, open the console. By default the console should open
+when pressing \` (*backtick*) on your keyboard (see
+[the related wiki page](https://satisfactory.fandom.com/wiki/Console)).
+With the console open, execute the `SaveWithNewSessionName` command.
 ```shell
-# change back into the root of your user's home directory
+SaveWithNewSessionName SatisfactoryServer_autosave_0 SatisfactoryServer
+```
+Now you can upload this save-game file to your server and you are ready to go.
+```shell
+# on the server change back into the root of your user's home directory
 cd /home/steam
 # create save-game files mounting directory
-mkdir -p ./SaveGames/common
-# copy the save-game files you want to use into the common directory (e.g. using scp)
-# here is an example of a game-save file
+mkdir -p SaveGames/common
+# copy the save-game file from your local machine to your server's common directory (e.g. using scp)
+# example scp command (executed on your local machine!!!) with the Satisfactory SSH connection config called satis-server
+scp /path/to/save/files/SatisfactoryServer_autosave_0.sav satis-server:/home/steam/SaveGames/common/SatisfactoryServer_autosave_0.sav
+# on the server, verify the save-game file exists
 ls SaveGames/common
-YourFancyLocalSaveGame.sav
-# rename the local save-game file(s) to match the Dockerfile configuartion
-mv SaveGames/common/YourFancyLocalSaveGame.sav SaveGames/common/ServerSave_autosave_1.sav
-# and verify the result
-ls SaveGames/common
-ServerSave_autosave_1.sav
+SatisfactoryServer_autosave_0.sav
 ```
 
 Update the mounted directory in the `docker-compose.yml` file to point to your
@@ -177,11 +187,9 @@ b3602a5b981b   satisfactory-server:1.0.0   "./proton run ../Sat…"   30 seconds
 ```
 
 If the server was able to start up successfully, start Satisfactory on your local
-machine and open the console. By default the console should open when pressing \`
-(*backtick*) on your keyboard (see
-[the related wiki page](https://satisfactory.fandom.com/wiki/Console)).
+machine and open the console while still in the main menu.
 Enter the following command (`open`) with your server's IP into the open console
-and your game should automatically connect to the "server" (*example given localhost*):
+and your game should automatically connect to the "server" (*example shows localhost instead of an actual IP*):
 ```shell
 open 127.0.0.1
 ```
