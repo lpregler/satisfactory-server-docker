@@ -6,6 +6,10 @@ ARG password=<PUT_STEAM_PASSWORD_HERE>
 
 # add python script for ini configuration from context to image
 ADD configure-ini-files.py /home/steam/configure-ini-files.py
+# change owner of file to user steam
+RUN chown steam:steam /home/steam/configure-ini-files.py
+# make python script executable
+RUN chmod +x /home/steam/configure-ini-files.py
 
 # install Proton requirements
 RUN dpkg --add-architecture i386
