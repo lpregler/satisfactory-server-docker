@@ -164,6 +164,21 @@ ls SaveGames/common
 SatisfactoryServer_autosave_0.sav
 ```
 
+You also need to **make sure** the **game is** actually **able to read and overwrite**
+the **save-game** file. So **change** the **file owner to** match the **user that** is going to
+**run** the **docker image** in the end (`steam` in this example):
+```shell
+# it is very likely the save-game file is owned by 'root' when copied via 'scp'
+ls -l SaveGames/common
+-rw-r--r-- 1 root  root  1848347 Sep 16 20:45 SatisfactoryServer_autosave_0.sav
+# in order to ensure the autosave file can be updated we need to change the file owner to the correct user
+cd SaveGames/common/
+sudo chown steam:steam SatisfactoryServer_autosave_0.sav
+# verify the file is now owned by the correct user
+ls -l
+-rw-r--r-- 1 steam steam 1848347 Sep 16 20:45 SatisfactoryServer_autosave_0.sav
+```
+
 Update the mounted directory in the `docker-compose.yml` file to point to your
 actual `SaveGames` directory:
 ```yaml
