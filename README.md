@@ -1,3 +1,5 @@
+# Archived - no longer needed since there are official servers nowadays
+
 # Satisfactory Experimental Server (Steam Version Only)
 ## Introduction
 Currently Satisfactory does not provide a dedicated game server. Although
